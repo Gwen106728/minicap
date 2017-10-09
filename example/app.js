@@ -43,13 +43,15 @@ wss.on('connection', function(ws) {
 
   function tryRead() {
     for (var chunk; (chunk = stream.read());) {
-      console.info('chunk(length=%d)', chunk.length)
+      console.info('chunk(length=%d)', chunk.length);
+
       for (var cursor = 0, len = chunk.length; cursor < len;) {
         if (readBannerBytes < bannerLength) {
           switch (readBannerBytes) {
           case 0:
             // version
             banner.version = chunk[cursor]
+
             break
           case 1:
             // length
@@ -126,7 +128,7 @@ wss.on('connection', function(ws) {
               frameBody
             , chunk.slice(cursor, cursor + frameBodyLength)
             ])
-
+            console.info(frameBody)
             // Sanity check for JPG header, only here for debugging purposes.
             if (frameBody[0] !== 0xFF || frameBody[1] !== 0xD8) {
               console.error(
@@ -134,9 +136,7 @@ wss.on('connection', function(ws) {
               process.exit(1)
             }
 
-            ws.send(frameBody, {
-              binary: true
-            })
+            ws.send(frameBody, {binary: true})
 
             cursor += frameBodyLength
             frameBodyLength = readFrameBytes = 0

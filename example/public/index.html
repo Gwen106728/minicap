@@ -9,7 +9,6 @@ var BLANK_IMG =
 
 var canvas = document.getElementById('canvas')
   , g = canvas.getContext('2d')
-
 var ws = new WebSocket('ws://localhost:9002', 'minicap')
 ws.binaryType = 'blob'
 
@@ -22,7 +21,9 @@ ws.onerror = function() {
 }
 
 ws.onmessage = function(message) {
-  var blob = new Blob([message.data], {type: 'image/jpeg'})
+
+  var blob = new Blob([message.data], {type: 'image/jpeg'});
+  console.log(blob)
   var URL = window.URL || window.webkitURL
   var img = new Image()
   img.onload = function() {
@@ -36,7 +37,8 @@ ws.onmessage = function(message) {
     u = null
     blob = null
   }
-  var u = URL.createObjectURL(blob)
+  var u = URL.createObjectURL(blob);
+  console.log(u)
   img.src = u
 }
 
